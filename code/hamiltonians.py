@@ -28,7 +28,7 @@ def nitrogen_vacancy_hamiltonian(b_field: float, spin_ops: tuple[Qobj]) -> Qobj:
 
     return H_NV
 
-def nitrogen_hamiltonian(b_field: float, hf_coupling: float, nuclues_s_ops: tuple[Qobj], electron_s_ops, rwa_approximation: bool = False) -> Qobj:
+def nitrogen_hamiltonian(b_field: float, hf_coupling: float, nuclues_s_ops: tuple[Qobj], electron_s_ops, rwa: bool = False) -> Qobj:
     """Hamiltonian of the N electron spin. Hamiltonian based on: PhysRevLett.97.087601 (https://arxiv.org/abs/quant-ph/0605179). 
         Returns:
             H_N (Qobj): Hamiltonian of the N electron spin
@@ -43,7 +43,7 @@ def nitrogen_hamiltonian(b_field: float, hf_coupling: float, nuclues_s_ops: tupl
     # define Hamiltonian contributions
     H_N = B1 * N_Sz + hf_coupling * (N_Sx * I_Sx + N_Sy * I_Sy + N_Sz * I_Sz)
 
-    if rwa_approximation:
+    if rwa:
         H_N = B1 * N_Sz + hf_coupling * (N_Sz * I_Sz)
 
     return H_N
