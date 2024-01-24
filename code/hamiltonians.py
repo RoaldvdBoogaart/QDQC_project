@@ -19,9 +19,8 @@ def nitrogen_vacancy_hamiltonian(b_field: float, spin_ops: tuple[Qobj]) -> Qobj:
     NV_Sx, NV_Sy, NV_Sz = spin_ops
 
     # define prefactors
-    gNV = 2  # electron g-factor
     D = 2.88e9  # zero-field splitting. unit: Hz
-    B0 = gNV * BOHR_MAGNETON_EV * b_field * elementary_charge / (Planck)  # Zeeman splitting energy of NV electron. unit: Hz
+    B0 = G_NV * BOHR_MAGNETON_EV * b_field * elementary_charge / (Planck)  # Zeeman splitting energy of NV electron. unit: Hz
 
     # define Hamiltonian contributions
     H_NV = D * (NV_Sz * NV_Sz - (1 / 3) * (NV_Sx * NV_Sx + NV_Sy * NV_Sy + NV_Sz * NV_Sz)) + B0 * NV_Sz
@@ -48,7 +47,7 @@ def nitrogen_atom_hamiltonian(b_field: float, hf_coupling: float, nuclues_s_ops:
 
     return H_N
 
-def hyperfine_coupling(hf_coupling: float, nuclues_s_ops: tuple[Qobj], electron_s_ops: tuple[Qobj]) -> Qobj:
+def hyperfine_coupling(hf_coupling: float, nuclues_s_ops: tuple[Qobj], electron_s_ops: tuple[Qobj], rwa: bool = True) -> Qobj:
     """Hamiltonian of the hyperfine coupling between NV center electron and N electron. Hamiltonian based on: PhysRevLett.97.087601 (https://arxiv.org/abs/quant-ph/0605179).
 
 
@@ -61,7 +60,11 @@ def hyperfine_coupling(hf_coupling: float, nuclues_s_ops: tuple[Qobj], electron_
 
     H_HF = hf_coupling * (N_Sx * I_Sx + N_Sy * I_Sy + N_Sz * I_Sz)
 
+    if rwa:
+        H_HF = hf_coupling * (N_Sz * I_Sz)
+
     return H_HF
+
 def dipolar_coupling(theta, distance, nv_s_ops: tuple[Qobj], n_s_ops: tuple[Qobj], rwa: bool = False) -> Qobj:
     """Hamiltonian of the dipolar coupling between NV center electron and N electron. Hamiltonian based on: PhysRevLett.97.087601 (https://arxiv.org/abs/quant-ph/0605179). 
         Returns:
