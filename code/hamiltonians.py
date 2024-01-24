@@ -28,7 +28,7 @@ def nitrogen_vacancy_hamiltonian(b_field: float, spin_ops: tuple[Qobj]) -> Qobj:
 
     return H_NV
 
-def nitrogen_hamiltonian(b_field: float, hf_coupling: float, nuclues_s_ops: tuple[Qobj], electron_s_ops, rwa: bool = False) -> Qobj:
+def nitrogen_atom_hamiltonian(b_field: float, hf_coupling: float, nuclues_s_ops: tuple[Qobj], electron_s_ops, rwa: bool = False) -> Qobj:
     """Hamiltonian of the N electron spin. Hamiltonian based on: PhysRevLett.97.087601 (https://arxiv.org/abs/quant-ph/0605179). 
         Returns:
             H_N (Qobj): Hamiltonian of the N electron spin
@@ -48,6 +48,20 @@ def nitrogen_hamiltonian(b_field: float, hf_coupling: float, nuclues_s_ops: tupl
 
     return H_N
 
+def hyperfine_coupling(hf_coupling: float, nuclues_s_ops: tuple[Qobj], electron_s_ops: tuple[Qobj]) -> Qobj:
+    """Hamiltonian of the hyperfine coupling between NV center electron and N electron. Hamiltonian based on: PhysRevLett.97.087601 (https://arxiv.org/abs/quant-ph/0605179).
+
+
+        Returns:
+            H_HF (Qobj): Hamiltonian of the hyperfine coupling between NV center electron and N electron
+    """
+    # unpack operators
+    I_Sx, I_Sy, I_Sz = nuclues_s_ops
+    N_Sx, N_Sy, N_Sz = electron_s_ops
+
+    H_HF = hf_coupling * (N_Sx * I_Sx + N_Sy * I_Sy + N_Sz * I_Sz)
+
+    return H_HF
 def dipolar_coupling(theta, distance, nv_s_ops: tuple[Qobj], n_s_ops: tuple[Qobj], rwa: bool = False) -> Qobj:
     """Hamiltonian of the dipolar coupling between NV center electron and N electron. Hamiltonian based on: PhysRevLett.97.087601 (https://arxiv.org/abs/quant-ph/0605179). 
         Returns:

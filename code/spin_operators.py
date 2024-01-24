@@ -1,23 +1,32 @@
 # encoding: utf-8
 
 import numpy as np
-from qutip import Qobj
+from qutip import Qobj, sigmax, sigmay, sigmaz
+
+# S=1/2 matrices
+S_x = sigmax() / 2
+S_y = sigmay() / 2
+S_z = sigmaz() / 2
 
 # S=1 matrices
-spin_1_x = Qobj(np.array([
+S1_x = Qobj(np.array([
     [0, 1, 0],
     [1, 0, 1],
     [0, 1, 0],
 ])) / np.sqrt(2)
 
-spin_1_y = Qobj(np.array([
+S1_y = Qobj(np.array([
     [0, 1, 0],
     [-1, 0, 1],
     [0, -1, 0],
 ])) / (np.sqrt(2) * 1j)
 
-spin_1_z = Qobj(np.array([
+S1_z = Qobj(np.array([
     [1, 0, 0],
     [0, 0, 0],
     [0, 0, -1],
 ]))
+
+
+
+
