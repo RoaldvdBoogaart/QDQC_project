@@ -48,7 +48,7 @@ def nitrogen_hamiltonian(b_field: float, hf_coupling: float, nuclues_s_ops: tupl
 
     return H_N
 
-def dipolar_coupling(theta, distance, nv_s_ops: tuple[Qobj], n_s_ops: tuple[Qobj]) -> Qobj:
+def dipolar_coupling(theta, distance, nv_s_ops: tuple[Qobj], n_s_ops: tuple[Qobj], rwa: bool = False) -> Qobj:
     """Hamiltonian of the dipolar coupling between NV center electron and N electron. Hamiltonian based on: PhysRevLett.97.087601 (https://arxiv.org/abs/quant-ph/0605179). 
         Returns:
             H_dip (Qobj): Hamiltonian of the dipolar coupling between NV center electron and N electron
@@ -66,5 +66,8 @@ def dipolar_coupling(theta, distance, nv_s_ops: tuple[Qobj], n_s_ops: tuple[Qobj
     H_dip = NV_Sx*N_Sx*J[0,0] + NV_Sx*N_Sy*J[0,1] + NV_Sx*N_Sz*J[0,2] \
             + NV_Sy*N_Sx*J[1,0] + NV_Sy*N_Sy*J[1,1] + NV_Sy*N_Sz*J[1,2] \
             + NV_Sz*N_Sx*J[2,0] + NV_Sz*N_Sy*J[2,1] + NV_Sz*N_Sz*J[2,2]
+
+    if rwa:
+        H_dip = (1 - 3 * np.cos(theta) ** 2) * (3 * NV_Sz * N_Sz - (NV_Sx * N_Sx + NV_Sy * N_Sy + NV_Sz * N_Sz))
 
     return H_dip
